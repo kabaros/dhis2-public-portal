@@ -2,5 +2,6 @@
   "routesDirectory": "./src/modules",
   "generatedRouteTree": "./src/routes.gen.ts",
   "routeFileIgnorePrefix": "-",
-  "quoteStyle": "double"
+  "quoteStyle": "double",
+  "routeFileIgnorePattern": ".+(spec|test).+"
 }

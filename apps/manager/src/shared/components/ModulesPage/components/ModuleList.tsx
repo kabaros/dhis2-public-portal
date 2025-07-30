@@ -24,6 +24,7 @@ const columns: SimpleTableColumn[] = [
 
 export function ModuleList({ filterType }: { filterType?: ModuleType }) {
 	const  modules  = useModules();
+	console.log(modules)
 	const navigate = useNavigate();
 	const filteredModules = useMemo(() => {
 		if (!modules) {

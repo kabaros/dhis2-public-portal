@@ -1,0 +1,84 @@
+import React from "react";
+// import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+// import { Route as ModulesProvider } from "./_provider";
+// import { RouterProvider } from "@tanstack/react-router";
+import { renderWithProviders } from "../../../tests/test-utils";
+import { ModuleList } from "../../shared/components/ModulesPage/components/ModuleList";
+import { CustomDataProvider } from "@dhis2/app-runtime";
+import { ModulesProvider } from "../../shared/components/ModulesPage/providers/ModulesProvider";
+
+const ModulesWithProvider = () => {
+	return (
+		<CustomDataProvider
+			data={{
+				"dataStore/hisptz-public-portal-modules": modules,
+			}}
+		>
+			<ModulesProvider>
+				<ModuleList />
+			</ModulesProvider>
+		</CustomDataProvider>
+	);
+};
+
+describe("Modules", () => {
+	it("should show the list of modules", async () => {
+		const { renderResult: screen, router } = await renderWithProviders(
+			ModulesWithProvider,
+			{
+				pathPattern: "/modules",
+				initialEntry: "/",
+			},
+		);
+		router.history.push("modules");
+		await screen.findByText("test visualisation");
+		expect(screen.getByText("Home")).toBeDefined();
+		expect(screen.getByText("test visualisation")).toBeDefined();
+	});
+});
+
+const modules = {
+	pager: { page: 1, pageSize: 50 },
+	entries: [
+		{
+			key: "home",
+			value: {
+				id: "home",
+				type: "SECTION",
+				label: "Home",
+				config: {
+					sections: [
+						{
+							id: "welcome-note",
+							item: {
+								item: {
+									id: "welcome-note",
+									content:
+										'\n<h1><strong style="font-size: 24pt;">Welcome to DHIS2 FlexiPortal!</strong></h1>\n\n<p>Thank you for using the DHIS2 FlexiPortal! This platform is designed to transform how DHIS2 data is publicly shared, accessed, and understood.</p>\n\n<p><br></p>\n<p><strong style="font-size: 18pt;">About the Application</strong></p>\n<p>The DHIS2 FlexiPortal brings together up-to-date, visualized, and aggregated health data from DHIS2 systems and enhances it with essential resources, including:</p>\n\n\n<ul>\n    <li><strong><br></strong></li>\n</ul>\n<ul style="list-style-type: circle;">\n    <li><strong>Data Visualizations</strong>: Interactive charts, maps, and dashboards</li>\n</ul>\n<ul>\n    <li><strong>Key Indicators</strong>: Important health metrics at a glance</li>\n    <li><strong>Document Library</strong>: Strategic reports, guidelines, and knowledge resources</li>\n    <li><strong>News Section or Blogs</strong>: Latest updates and announcements</li>\n    <li><strong>FAQ Section</strong>: Answers to common questions</li>\n    <li><strong>Feedback System</strong>: A way for users to provide input</li>\n</ul>\n\n\n\n\n\n\n\n<p><br></p>\n<h2><span style="font-size: 18pt;"><strong>Getting Started</strong></span></h2>\n<p><br></p>\n<p>To configure your Public Portal:</p>\n\n<ol>\n    <li><strong>Access the Manager App</strong>: Log in to your DHIS2 instance and open the Portal Manager application</li>\n    <li><strong>Configure Appearance</strong>: Customize the look and feel of your portal</li>\n    <li><strong>Set Up Modules</strong>: Add and configure the modules you want to display</li>\n    <li><strong>Manage Content</strong>: Add and update content for your portal</li>\n</ol>\n<p><br></p>\n\n<p>For more detailed instructions, please refer to the documentation or contact your system administrator.</p>\n<p><br></p>\n\n<p><em>Enjoy using the DHIS2 FlexiPortal!</em></p>\n',
+								},
+								type: "RICH_TEXT",
+							},
+							type: "SINGLE_ITEM",
+							title: "Welcome to DHIS2 FlexiPortal",
+							sortOrder: 0,
+						},
+					],
+				},
+				sectionDisplay: "Vertical",
+			},
+		},
+		{
+			key: "test",
+			value: {
+				id: "test-visualisation",
+				type: "VISUALIZATION",
+				label: "test visualisation",
+				config: {
+					grouped: false,
+					layouts: { lg: [], md: [], sm: [], xs: [] },
+				},
+			},
+		},
+	],
+};
