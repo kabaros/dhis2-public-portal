@@ -1,13 +1,19 @@
 import React from "react";
-// import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
-// import { Route as ModulesProvider } from "./_provider";
-// import { RouterProvider } from "@tanstack/react-router";
+import userEvent from '@testing-library/user-event'
+import { describe, expect, it, vi } from "vitest";
 import { renderWithProviders } from "../../../tests/test-utils";
 import { ModuleList } from "../../shared/components/ModulesPage/components/ModuleList";
 import { CustomDataProvider } from "@dhis2/app-runtime";
 import { ModulesProvider } from "../../shared/components/ModulesPage/providers/ModulesProvider";
 
+const fakeNavigate = vi.fn()
+
+vi.mock('@tanstack/react-router', async (importOriginal) => {
+	return {
+		...await importOriginal(),
+		useNavigate: () => fakeNavigate
+	}
+})
 const ModulesWithProvider = () => {
 	return (
 		<CustomDataProvider
@@ -24,6 +30,7 @@ const ModulesWithProvider = () => {
 
 describe("Modules", () => {
 	it("should show the list of modules", async () => {
+		const user = userEvent.setup()
 		const { renderResult: screen, router } = await renderWithProviders(
 			ModulesWithProvider,
 			{
@@ -35,6 +42,8 @@ describe("Modules", () => {
 		await screen.findByText("test visualisation");
 		expect(screen.getByText("Home")).toBeDefined();
 		expect(screen.getByText("test visualisation")).toBeDefined();
+		await user.click(screen.getByTestId('btn-goto-home'))
+		expect(fakeNavigate.mock.calls[0][0].params.moduleId).toEqual('home')
 	});
 });
 

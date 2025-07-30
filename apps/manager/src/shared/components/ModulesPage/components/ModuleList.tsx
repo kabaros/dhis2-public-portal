@@ -46,6 +46,7 @@ export function ModuleList({ filterType }: { filterType?: ModuleType }) {
 				actions: (
 					<ButtonStrip>
 						<Button
+							dataTest={`btn-goto-${module.id}`}
 							small
 							icon={<IconView16 />}
 							onClick={() => {

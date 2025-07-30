@@ -38,7 +38,7 @@ export async function renderWithProviders(
   const rootRoute = createRootRoute({
     component: () => (
       <>
-        <div data-testid="root-layout"></div>
+        <div data-test="root-layout"></div>
         <Outlet />
       </>
     ),
